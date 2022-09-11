@@ -1,7 +1,14 @@
 const User = require('../models/user');
 
 const getUsers = (req, res) => {
-  res.send({ massage: 'Hi' });
+  User.find({}).then((users) => res.send(users))
+    .catch((err) => res.status(500).send({ message: err.message }));
+};
+
+const getUserById = (req, res) => {
+  User.findById(req.params.userId)
+    .then((user) => res.send(user))
+    .catch((err) => res.status(500).send({ message: err.message }));
 };
 
 const createUser = (req, res) => {
@@ -10,4 +17,4 @@ const createUser = (req, res) => {
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
-module.exports = { getUsers, createUser };
+module.exports = { getUsers, getUserById, createUser };
