@@ -11,12 +11,18 @@ const getUsers = (req, res) => {
 const getUserById = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => res.send(user))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(NOT_FOUND_CODE).send({ massage: 'Пользователь с указанным id не найден.' });
+      } else {
+        serverRespondErr(res);
+      }
+    });
 };
 
 const createUser = (req, res) => {
-  const { userName, about, avatar } = req.body;
-  User.create({ userName, about, avatar }).then((user) => res.send(user))
+  const { userName, about } = req.body;
+  User.create({ userName, about }).then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя.' });
