@@ -9,8 +9,8 @@ const getCards = (req, res) => {
 };
 
 const createCard = (req, res) => {
-  const { cardName, link } = req.body;
-  Card.create({ cardName, link, owner: req.user._id }).then((card) => res.send(card))
+  const { name, link } = req.body;
+  Card.create({ name, link, owner: req.user._id }).then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании карточки.' });

@@ -21,8 +21,8 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { userName, about } = req.body;
-  User.create({ userName, about }).then((user) => res.send(user))
+  const { name, about } = req.body;
+  User.create({ name, about }).then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя.' });
@@ -33,8 +33,8 @@ const createUser = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-  const { userName, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { userName, about })
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, about })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
