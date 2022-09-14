@@ -13,7 +13,7 @@ const getUserById = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(WRONG_REQUEST_CODE).send({ massage: 'Пользователь с указанным id не найден.' });
+        res.status(WRONG_REQUEST_CODE).send({ message: 'Пользователь с указанным id не найден.' });
       } else {
         serverRespondErr(res);
       }
@@ -41,9 +41,9 @@ const updateUser = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(WRONG_REQUEST_CODE).send({ massage: 'Переданы некорректные данные при обновлении профиля.' });
+        res.status(WRONG_REQUEST_CODE).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
       } else if (err.name === 'CastError') {
-        res.status(NOT_FOUND_CODE).send({ massage: 'Пользователь с указанным id не найден.' });
+        res.status(NOT_FOUND_CODE).send({ message: 'Пользователь с указанным id не найден.' });
       } else {
         serverRespondErr(res);
       }
@@ -59,9 +59,9 @@ const updateAvatar = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(WRONG_REQUEST_CODE).send({ massage: 'Переданы некорректные данные при обновлении аватара.' });
+        res.status(WRONG_REQUEST_CODE).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
       } else if (err.name === 'CastError') {
-        res.status(NOT_FOUND_CODE).send({ massage: 'Пользователь с указанным id не найден.' });
+        res.status(NOT_FOUND_CODE).send({ message: 'Пользователь с указанным id не найден.' });
       } else {
         serverRespondErr(res);
       }
