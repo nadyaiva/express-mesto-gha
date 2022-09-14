@@ -21,8 +21,8 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, about } = req.body;
-  User.create({ name, about }).then((user) => res.send(user))
+  const { name, about, avatar } = req.body;
+  User.create({ name, about, avatar }).then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя.' });
