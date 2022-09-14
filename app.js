@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use('/users', routerUsers);
-app.use('/card', routerCard);
+app.use('/cards', routerCard);
 app.listen(PORT, () => {
   console.log('Lontched');
 });
