@@ -1,10 +1,10 @@
 const WRONG_REQUEST_CODE = 400;
 const NOT_FOUND_CODE = 404;
 const SERVER_ERROR_CODE = 500;
-const SERVER_ERROR_MASSAGE = 'Ошибка на стороне сервера';
+const SERVER_ERROR_MESSAGE = 'Ошибка на стороне сервера';
 
 const serverRespondErr = (res) => {
-  res.status(SERVER_ERROR_CODE).send({ message: SERVER_ERROR_MASSAGE });
+  res.status(SERVER_ERROR_CODE).send({ message: SERVER_ERROR_MESSAGE });
 };
 
 class NotFoundError extends Error {
