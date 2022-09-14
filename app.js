@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const routerUsers = require('./routes/user');
 const routerCard = require('./routes/card');
+const { NOT_FOUND_CODE } = require('./err');
 
 const { PORT = 3000 } = process.env;
 
@@ -20,6 +21,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use('/users', routerUsers);
 app.use('/cards', routerCard);
+app.use('*', (req, res) => {
+  res.status(NOT_FOUND_CODE).send({
+    message: 'Страница не найдена',
+  });
+});
 app.listen(PORT, () => {
-  console.log('Lontched');
 });

@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const {
-  WRONG_REQUEST_CODE, NOT_FOUND_CODE, serverRespondErr,
+  WRONG_REQUEST_CODE, NOT_FOUND_CODE, serverRespondErr, NotFoundError,
 } = require('../err');
 
 const getUsers = (req, res) => {
@@ -10,10 +10,15 @@ const getUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   User.findById(req.params.userId)
+    .orFail(() => {
+      throw new NotFoundError('Передан несуществующий id пользователя');
+    })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Пользователь с указанным id не найден.' });
+      } else if (err.name === 'NotFound') {
+        res.status(NOT_FOUND_CODE).send({ message: err.message });
       } else {
         serverRespondErr(res);
       }

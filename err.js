@@ -10,7 +10,7 @@ const serverRespondErr = (res) => {
 class NotFoundError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'NotFoundError';
+    this.name = 'NotFound';
     this.statusCode = 404;
   }
 }

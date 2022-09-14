@@ -1,6 +1,6 @@
 const Card = require('../models/card');
 const {
-  WRONG_REQUEST_CODE, NOT_FOUND_CODE, serverRespondErr,
+  WRONG_REQUEST_CODE, NOT_FOUND_CODE, serverRespondErr, NotFoundError,
 } = require('../err');
 
 const getCards = (req, res) => {
@@ -23,10 +23,15 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
+    .orFail(() => {
+      throw new NotFoundError('Передан несуществующий id карточки');
+    })
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Карточка с указанным _id не найдена.' });
+      } else if (err.name === 'NotFound') {
+        res.status(NOT_FOUND_CODE).send({ message: err.message });
       }
       serverRespondErr(res);
     });
@@ -36,11 +41,18 @@ const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true },
-  ).then((card) => res.send(card))
+    {
+      new: true,
+    },
+  ).orFail(() => {
+    throw new NotFoundError('Передан несуществующий id карточки');
+  })
+    .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(NOT_FOUND_CODE).send({ message: 'Переданы некорректные данные для постановки лайка.' });
+      } else if (err.name === 'NotFound') {
+        res.status(NOT_FOUND_CODE).send({ message: err.message });
       } else if (err.name === 'CastError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Передан несуществующий id карточки.' });
       } else {
@@ -54,10 +66,15 @@ const dislikeCard = (req, res) => {
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
-  ).then((card) => res.send(card))
+  ).orFail(() => {
+    throw new NotFoundError('Передан несуществующий id карточки');
+  })
+    .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(NOT_FOUND_CODE).send({ message: 'Переданы некорректные данные для снятии лайка.' });
+      } else if (err.name === 'NotFound') {
+        res.status(NOT_FOUND_CODE).send({ message: err.message });
       } else if (err.name === 'CastError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Передан несуществующий id карточки.' });
       } else {
