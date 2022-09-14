@@ -4,7 +4,7 @@ const SERVER_ERROR_CODE = 500;
 const SERVER_ERROR_MASSAGE = 'Ошибка на стороне сервера';
 
 const serverRespondErr = (res) => {
-  res.status(SERVER_ERROR_CODE).send(SERVER_ERROR_MASSAGE);
+  res.status(SERVER_ERROR_CODE).send({ message: SERVER_ERROR_MASSAGE });
 };
 
 class NotFoundError extends Error {
