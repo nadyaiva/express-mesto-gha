@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const routerUsers = require('./routes/user');
 const routerCard = require('./routes/card');
-const { NOT_FOUND_CODE } = require('./err');
+const { NOT_FOUND_CODE } = require('./utils/err');
 
 const { PORT = 3000 } = process.env;
 

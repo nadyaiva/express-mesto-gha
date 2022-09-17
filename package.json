@@ -19,7 +19,7 @@
     "express": "^4.18.1",
     "mongoose": "^6.6.0"
   },
-  "description": "[![Tests](https://github.com/nadyaiva/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/nadyaiva/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/nadyaiva/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/nadyaiva/express-mesto-gha/actions/workflows/tests-14-sprint.yml) # Проект Mesto фронтенд + бэкенд",
+  "description": "Project Mesto: frontend + backend",
   "main": "app.js",
   "repository": {
     "type": "git",

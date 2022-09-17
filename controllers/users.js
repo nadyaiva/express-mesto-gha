@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const {
   WRONG_REQUEST_CODE, NOT_FOUND_CODE, serverRespondErr, NotFoundError,
-} = require('../err');
+} = require('../utils/err');
 
 const getUsers = (req, res) => {
   User.find({}).then((users) => res.send(users))
