@@ -1,4 +1,7 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+
 const {
   WRONG_REQUEST_CODE, NOT_FOUND_CODE, serverRespondErr, NotFoundError,
 } = require('../utils/err');
@@ -26,8 +29,13 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar }).then((user) => res.send(user))
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    })).then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя.' });
@@ -35,6 +43,25 @@ const createUser = (req, res) => {
       }
       serverRespondErr(res);
     });
+};
+
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        'secret',
+        { expiresIn: '7d' },
+      );
+      res.cookie('jwtForAutorization', token, {
+        maxAge: 604800,
+        httpOnly: true,
+      });
+      res.send({ message: 'Вход выполнен успешно!' });
+    })
+    .catch(next);
 };
 
 const updateUser = (req, res) => {
@@ -74,5 +101,5 @@ const updateAvatar = (req, res) => {
 };
 
 module.exports = {
-  getUsers, getUserById, createUser, updateUser, updateAvatar,
+  getUsers, getUserById, createUser, login, updateUser, updateAvatar,
 };
