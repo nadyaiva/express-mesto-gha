@@ -50,7 +50,11 @@ const login = (req, res) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'secret_key', { expiresIn: '7d' });
-      res.send({ token });
+      res.cookie('jwtToken', token, {
+        maxAge: 604800,
+        httpOnly: true,
+      });
+      res.send('Успешно');
     })
     .catch((err) => {
       res
@@ -95,6 +99,18 @@ const updateAvatar = (req, res) => {
     });
 };
 
+const getUserMe = (req, res) => {
+  console.log(req.user._id);
+  User.findById(req.user._id)
+    .orFail(() => {
+      throw new NotFoundError('Пользователь не найден');
+    })
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      res.status(NOT_FOUND_CODE).send({ massage: err.massage });
+    });
+};
+
 module.exports = {
-  getUsers, getUserById, createUser, login, updateUser, updateAvatar,
+  getUsers, getUserById, createUser, login, updateUser, updateAvatar, getUserMe,
 };
