@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const {
   WRONG_REQUEST_CODE, NOT_FOUND_CODE, serverRespondErr, NotFoundError,
-} = require('../utils/err');
+} = require('../utils/NotFoundError');
 
 const getCards = (req, res) => {
   Card.find({}).then((cards) => res.send(cards))
