@@ -20,13 +20,19 @@ const createCard = (req, res) => {
     });
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
-  Card.findByIdAndRemove(cardId)
+  Card.findById(cardId)
     .orFail(() => {
       throw new NotFoundError('Передан несуществующий id карточки');
     })
-    .then((card) => res.send(card))
+    .then((card) => {
+      if (req.user._id !== card.owner.toString()) {
+        throw new Error('Вы пытаетесь удалить чужую карточку');
+      } Card.findByIdAndRemove(cardId)
+        .then((cards) => res.send({ data: cards }))
+        .catch(next);
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(WRONG_REQUEST_CODE).send({ message: 'Карточка с указанным _id не найдена.' });
