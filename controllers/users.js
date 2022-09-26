@@ -56,11 +56,7 @@ const login = (req, res) => {
       });
       res.send('Успешно');
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
+    .catch(next);
 };
 
 const updateUser = (req, res) => {
