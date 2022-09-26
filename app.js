@@ -6,7 +6,7 @@ const routerUsers = require('./routes/user');
 const routerCard = require('./routes/card');
 const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
-const { NotFoundError } = require('./utils/NotFoundError');
+const NotFoundError = require('./utils/NotFoundError');
 const handleError = require('./middlewares/handleError');
 
 const { PORT = 3000 } = process.env;
