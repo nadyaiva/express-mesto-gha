@@ -6,7 +6,8 @@ module.exports = (req, res, next) => {
   const { jwtToken } = req.cookies;
 
   if (!jwtToken) {
-    throw new UnautorizedError('Необходима авторизация');
+    next(new UnautorizedError('Необходима авторизация'));
+    return;
   }
 
   const token = jwtToken;
@@ -15,7 +16,8 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'secret_key');
   } catch (err) {
-    throw new UnautorizedError('Необходима авторизация');
+    next(new UnautorizedError('Необходима авторизация'));
+    return;
   }
 
   req.user = payload;
